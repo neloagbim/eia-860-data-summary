@@ -8,6 +8,7 @@ Created on Thu Jan 11 14:59:30 2024
 import pandas as pd
 import tqdm
 import requests
+import json
 import openpyxl
 import io
 import urllib.parse
@@ -48,12 +49,18 @@ from sqlalchemy import (MetaData,Table, Column, Text, Integer, Numeric, Boolean,
 # # rename column with ()
 # df = df.rename(columns = {'Nameplate Capacity (MW)':'Nameplate Capacity - MW'})
 
+# read in secrets file
+secrets = open(r'C:\Users\NeloAgbim\Documents\PythonPrjEnvs\eiasummary\secrets.json')
+
+# save as a credentials dictionary
+cred = json.load(secrets)
+
 # connect to sql
-user = 'postgres'
-password = 'password'
-host= 'localhost'
-port = '5432'
-database = 'raw'
+user = cred['raw']['user']
+password = cred['raw']['password']
+host= cred['raw']['host']
+port = cred['raw']['port']
+database = cred['raw']['database']
 
 # string together connction details
 connection_string = f'postgresql://{user}:{password}@{host}:{port}/{database}'
