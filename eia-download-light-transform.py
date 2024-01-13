@@ -13,6 +13,7 @@ import io
 import urllib.parse
 import psycopg2
 from sqlalchemy import create_engine
+from sqlalchemy import (MetaData,Table, Column, Text, Integer, Numeric, Boolean, VARCHAR)
 
 #request download
 url = 'https://www.eia.gov/electricity/data/eia860m/xls/november_generator2023.xlsx'
@@ -32,7 +33,7 @@ df["Report Date"] = file_date
 # list necessary columns
 cols = ['Entity ID', 'Entity Name', 'Plant ID', 'Plant Name', 'Plant State',
         'County', 'Balancing Authority Code',
-       'Sector', 'Generator ID', 'Unit Code', 'Nameplate Capacity (MW)',
+       'Sector', 'Generator ID', 'Nameplate Capacity (MW)',
        'Technology','Energy Source Code', 'Prime Mover Code', 'Operating Month',
        'Operating Year', 'Planned Retirement Month', 'Planned Retirement Year',
        'Status', 'Report Date']
@@ -60,13 +61,61 @@ host= 'localhost'
 port = '5432'
 database = 'raw'
 
+# string together connction details
 connection_string = f'postgresql://{user}:{password}@{host}:{port}/{database}'
 
+#create sql engine and metadata object
+engine = create_engine(connection_string)
+metadata = MetaData()
+
+reports_2013 = Table('reports_2013', 
+                     metadata, 
+                     Column('entity_id', Integer()),
+                     Column('plant_nane', Text()),
+                     Column('plant_id', Integer()),
+                     Column('state',VARCHAR(2)),
+                     Column('county',Text()),
+                     Column('balancing_auth',Text()),
+                     Column('sector',Text()),
+                     Column('unit_id',Text()),
+                     Column('nameplate_capacity_mw',Numeric()),
+                     Column('technology',Text()),
+                     Column('fuel_source',Text()),
+                     Column('prime_mover',Text()),
+                     Column('op_month',Integer()), 
+                     Column('op_year',Integer()),
+                     Column('retire_month',Integer()),
+                     Column('retire_year', Integer()),
+                     Column('op_status', Text()),
+                     Column('report_date', Text()),
+                     schema= 'eia860'
+                     )
+# create table
+metadata.create_all(engine)
 #%%
 
 # generate list of all years of data we want to collect
 
 years = list(range(2019,2024))
+
+months = ['january',
+'february',
+'march',
+'april',
+'may',
+'june',
+'July' ,
+'august',
+'september',
+'october',
+'november',
+'december']
+
+for yr in range(0,len(years)):
+    for mnth in range(0,len(months)):
+        if years[yr]==2023 and months[mnth]=="november":
+            #url to download
+            url = 'https://www.eia.gov/electricity/data/eia860m/xls/november_generator2023.xlsx'
 
 #median nameplate capacity for each prime mover/gen type - wind and sun only.
 # cannot add together capacity
