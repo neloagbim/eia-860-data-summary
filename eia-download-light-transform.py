@@ -4,51 +4,42 @@ Created on Thu Jan 11 14:59:30 2024
 
 @author: NeloAgbim
 """
+#%% Install libraries
 
 import pandas as pd
-import tqdm
+import numpy as np
+from tqdm import tqdm
 import requests
 import json
-import openpyxl
 import io
-import urllib.parse
 import psycopg2
 from sqlalchemy import create_engine
 from sqlalchemy import (MetaData,Table, Column, Text, Integer, Numeric, Boolean, VARCHAR)
+from datetime import date, datetime
+import time
 
-# #request download
-# url = 'https://www.eia.gov/electricity/data/eia860m/xls/november_generator2023.xlsx'
-# response = requests.get(url)
+#%%
+# setup
 
-# # wrap request response in IO wrapper to get xlsx read in
-# df = pd.read_excel(io.BytesIO(response.content), skiprows=2, sheet_name = 0)
+# generate list of all years of data we want to collect
 
-# df.dtypes
+years = list(range(2019,2024))
 
-# file_name = url.split('xls/',2)[1]
-# file_date = file_name.replace("_generator", "-").replace(".xlsx", "")
+# generate list of all months
+months = ['january',
+'february',
+'march',
+'april',
+'may',
+'june',
+'July' ,
+'august',
+'september',
+'october',
+'november',
+'december']
 
-# # save eia file date as 
-# df["Report Date"] = file_date
-
-
-# # keep only listed columns
-# df = df[cols]
-
-# # remove rows without an entity id
-# df = df[df["Entity ID"].isna()==False].reset_index(drop=True)
-
-# #rempve row with notes
-# df = df[df["Entity ID"].str.contains("NOTE")!=True].reset_index(drop=True)
-
-# # only operating plants
-# df = df[df["Status"]=='(OP) Operating'].reset_index(drop=True)
-# # only want utility sector
-# df = df[df["Sector"]=='Electric Utility'].reset_index(drop=True)
-
-# # rename column with ()
-# df = df.rename(columns = {'Nameplate Capacity (MW)':'Nameplate Capacity - MW'})
-
+#%% Connecting to Postgresql
 # read in secrets file
 secrets = open(r'C:\Users\NeloAgbim\Documents\PythonPrjEnvs\eiasummary\secrets.json')
 
@@ -69,77 +60,76 @@ connection_string = f'postgresql://{user}:{password}@{host}:{port}/{database}'
 engine = create_engine(connection_string)
 metadata = MetaData()
 
-reports_2013 = Table('reports_2013', 
-                     metadata, 
-                     Column('entity_id', Integer()),
-                     Column('plant_nane', Text()),
-                     Column('plant_id', Integer()),
-                     Column('state',VARCHAR(2)),
-                     Column('county',Text()),
-                     Column('balancing_auth',Text()),
-                     Column('sector',Text()),
-                     Column('unit_id',Text()),
-                     Column('nameplate_capacity_mw',Numeric()),
-                     Column('technology',Text()),
-                     Column('fuel_source',Text()),
-                     Column('prime_mover',Text()),
-                     Column('op_month',Integer()), 
-                     Column('op_year',Integer()),
-                     Column('retire_month',Integer()),
-                     Column('retire_year', Integer()),
-                     Column('op_status', Text()),
-                     Column('report_date', Text()),
-                     schema= 'eia860'
-                     )
-# create table
-metadata.create_all(engine)
+# create 5 tables needed
+for x in range(0,len(years)):
+    reports = Table('reports_'+str(years[x]), 
+                         metadata, 
+                         Column('entity_id', Integer()),
+                         Column('entity_name',Text(())),
+                         Column('plant_id', Integer()),
+                         Column('plant_name', Text()),
+                         Column('state',VARCHAR(2)),
+                         Column('county',Text()),
+                         Column('balancing_auth',Text()),
+                         Column('sector',Text()),
+                         Column('unit_id',Text()),
+                         Column('nameplate_capacity_mw',Numeric()),
+                         Column('technology',Text()),
+                         Column('fuel_source',Text()),
+                         Column('prime_mover',Text()),
+                         Column('op_month',Integer()), 
+                         Column('op_year',Integer()),
+                         Column('retire_month',Integer()),
+                         Column('retire_year', Integer()),
+                         Column('op_status', Text()),
+                         Column('report_date', Text()),
+                         schema= 'eia860'
+                         )
+    # create table
+    metadata.create_all(engine)
+    #delete report variable
+    del reports
 
 engine.close()
 #%%
 
+# # get current date
+# current_date = datetime.today()
+
+# # day december 2023 data will be released
+# release_date = "2024-01-24"
+
+# release_date = datetime.strptime(release_date,"%Y-%m-%d")
+
+# current_date>release_date
+
 # define columns to go in final dataframe for sql upload
 
-final_cols = ['entity_id', 
-'plant_nane', 
-'plant_id', 
-'state',
-'county',
-'balancing_auth',
-'sector',
-'unit_id',
-'nameplate_capacity_mw',
-'technology',
-'fuel_source',
-'prime_mover',
-'op_month', 
-'op_year',
-'retire_month',
-'retire_year', 
-'op_status', 
-'report_date' ]
+# final_cols = ['entity_id', 
+#             'entity_name',
+#             'plant_id',
+#             'plant_name',  
+#             'state',
+#             'county',
+#             'balancing_auth',
+#             'sector',
+#             'unit_id',
+#             'nameplate_capacity_mw',
+#             'technology',
+#             'fuel_source',
+#             'prime_mover',
+#             'op_month', 
+#             'op_year',
+#             'retire_month',
+#             'retire_year', 
+#             'op_status', 
+#             'report_date' ]
 
 
-# create dataframe to hold eia data
-df_eia = pd.DataFrame(columns=final_cols)
+# # create dataframe to hold eia data
+# df_eia = pd.DataFrame(columns=final_cols)
 
 
-# generate list of all years of data we want to collect
-
-years = list(range(2019,2024))
-
-# generate list of all months
-months = ['january',
-'february',
-'march',
-'april',
-'may',
-'june',
-'July' ,
-'august',
-'september',
-'october',
-'november',
-'december']
 
 #  necessary columns from download
 cols = ['Entity ID', 'Entity Name', 'Plant ID', 'Plant Name', 'Plant State',
@@ -149,43 +139,136 @@ cols = ['Entity ID', 'Entity Name', 'Plant ID', 'Plant Name', 'Plant State',
        'Operating Year', 'Planned Retirement Month', 'Planned Retirement Year',
        'Status', 'Report Date']
 
+yr=0
+
 # create a dataframe of eia data for each year
 for yr in range(0,len(years)):
-    for mnth in range(0,len(months)):
+    for mnth in tqdm(range(0,len(months))):
         if years[yr]==2023 and months[mnth]=="november":
             #url to download
             url = 'https://www.eia.gov/electricity/data/eia860m/xls/november_generator2023.xlsx'
         else:
             #url to download
             url = 'https://www.eia.gov/electricity/data/eia860m/archive/xls/'+months[mnth] + '_generator'+str(years[yr])+'.xlsx'
-        # request download
-        response = requests.get(url)
-        # wrap request response in IO wrapper to get xlsx read in
-        df = pd.read_excel(io.BytesIO(response.content), skiprows=2, sheet_name = 0)
-        # get file name
-        file_name = url.split('xls/',2)[1]
-        # extract month and year
-        file_date = file_name.replace("_generator", "-").replace(".xlsx", "")
+        #test url
+        r = requests.head(url)
+        # if http connection worked
+        if r.status_code == 200:
+            # request download and timeout after 3 seconds
+            response = requests.get(url,timeout = 3)
+            # wrap request response in IO wrapper to get xlsx read in
+            df = pd.read_excel(io.BytesIO(response.content), skiprows=1, sheet_name = 0) # skiprows=2,
 
-        # save eia file date as 
-        df["Report Date"] = file_date
-        # keep only listed columns
-        df = df[cols]
+            # if column headers are the 1st row (2nd before importing)
+            if df.iloc[0,0] == 'Entity ID':
+                # then set the 1st row as the column header
+                df.columns = df.iloc[0]
+                # delete the row from the df
+                df = df.iloc[1:,:]
+            else:
+                # get file name
+                file_name = url.split('xls/',2)[1]
+                # extract month and year
+                file_date = file_name.replace("_generator", "-").replace(".xlsx", "")
+        
+                # save eia file date as 
+                df["Report Date"] = file_date
+                # keep only listed columns
+                df = df[cols]
+        
+                # remove rows without an entity id
+                df = df[df["Entity ID"].isna()==False].reset_index(drop=True)
+                #remove row with notes
+                df = df[df["Entity ID"].str.contains("NOTE")!=True].reset_index(drop=True)
+                # only operating plants
+                df = df[df["Status"]=='(OP) Operating'].reset_index(drop=True)
+                # only want utility sector
+                df = df[df["Sector"]=='Electric Utility'].reset_index(drop=True)
+                
+                #rename columns
+                df = df.rename( columns= {'Entity ID':'entity_id', 
+                    'Entity Name':'entity_name', 
+                    'Plant ID':'plant_id', 
+                    'Plant Name':'plant_name',
+                    'Plant State':'state',
+                    'County':'county',
+                    'Balancing Authority Code':'balancing_auth',
+                    'Sector':'sector',
+                    'Generator ID':'unit_id',
+                    'Nameplate Capacity (MW)':'nameplate_capacity_mw',
+                    'Technology':'technology',
+                    'Energy Source Code':'fuel_source',
+                    'Prime Mover Code':'prime_mover',
+                    'Operating Month':'op_month', 
+                    'Operating Year':'op_year',
+                    'Planned Retirement Month':'retire_month',
+                    'Planned Retirement Year':'retire_year', 
+                    'Status':'op_status', 
+                    'Report Date':'report_date' })
+                # replace blanks
+                df['retire_year'] = df['retire_year'].replace(' ','0')
+                df['retire_year'] =df['retire_year'].astype('str')
+                df['retire_year'] = df['retire_year'].str.replace('.0','')
+                
+                #eplace space in  month
+                df['retire_month'] = df['retire_month'].replace(' ','0')
+                # get rid of decimals
+                df['retire_month'] =df['retire_month'].astype('str')
+                df['retire_month'] = df['retire_month'].str.replace('.0','')
+                
+                df = df.astype({'entity_id':'int', 'entity_name':'str', 'plant_id':'int', 'plant_name':'str', 'state':'str', 'county':'str',
+                       'balancing_auth':'str', 'sector':'str', 'unit_id':'str', 'nameplate_capacity_mw':'float',
+                       'technology':'str', 'fuel_source':'str', 'prime_mover':'str', 'op_month':'int', 'op_year':'int',
+                       'retire_month':'int', 'retire_year':'int', 'op_status':'str', 'report_date':'str'})
+        # if the loop is on the first month of the year
+        if mnth == 0:
+            # initiate df_eia wchich will hold all eia data for that year
+            df_eia = df
+            # replace blanks
+            df_eia['retire_year'] = df_eia['retire_year'].replace(' ','0')
+            df_eia['retire_year'] =df_eia['retire_year'].astype('str')
+            df_eia['retire_year'] = df_eia['retire_year'].str.replace('.0','')
+            
+            #eplace space in  month
+            df_eia['retire_month'] = df_eia['retire_month'].replace(' ','0')
+            # get rid of decimals
+            df_eia['retire_month'] =df_eia['retire_month'].astype('str')
+            df_eia['retire_month'] = df_eia['retire_month'].str.replace('.0','')
+            
+            df_eia = df_eia.astype({'entity_id':'int', 'entity_name':'str', 'plant_id':'int', 'plant_name':'str', 'state':'str', 'county':'str',
+                   'balancing_auth':'str', 'sector':'str', 'unit_id':'str', 'nameplate_capacity_mw':'float',
+                   'technology':'str', 'fuel_source':'str', 'prime_mover':'str', 'op_month':'int', 'op_year':'int',
+                   'retire_month':'int', 'retire_year':'int', 'op_status':'str', 'report_date':'str'})
+        # otherwise append the df    
+        else:
+            # after cleaning data for a given month, add it to the dataframe for the year
+            df_eia = pd.concat([df_eia,df],axis=0,ignore_index=True) #ignore index to ensure reset
 
-        # remove rows without an entity id
-        df = df[df["Entity ID"].isna()==False].reset_index(drop=True)
-        #remove row with notes
-        df = df[df["Entity ID"].str.contains("NOTE")!=True].reset_index(drop=True)
-        # only operating plants
-        df = df[df["Status"]=='(OP) Operating'].reset_index(drop=True)
-        # only want utility sector
-        df = df[df["Sector"]=='Electric Utility'].reset_index(drop=True)
-        # rename column with ()
-        df = df.rename(columns = {'Nameplate Capacity (MW)':'Nameplate Capacity - MW'})
-    # after cleaning data for a given month, add it to the dataframe for the year
-    df_eia.append(df)
-    
-    del df
+        # delete df
+        del df, file_date
+        # wait a few seconds
+        time.sleep(2.5)
+    # put df in table
+    df_eia.to_sql('reports_'+str(years[yr]),schema='eia860', con=engine,if_exists = 'append', index=False)
 
-#median nameplate capacity for each prime mover/gen type - wind and sun only.
-# cannot add together capacity
+
+
+#%% refactor with functions
+# try error handling function
+
+def request_xlsx(url):
+    try:
+        r = requests.head(url)
+        if r.status_code == 200:
+            #response = requests.get(url, 3)
+            #df = pd.read_excel(io.BytesIO(response))
+            return ("Site exists")
+        else:
+            return "Site does not exist or server down"
+    except r.ConnectionError as e:
+        return e
+
+url = 'https://www.eia.gov/electricity/data/eia860m/xls/november_generator2023.xlsx'
+url2 = 'https://www.eia.gov/electricity/data/eia860m/xls/november_generator2023.xlsx'
+
+request_xlsx(url)
