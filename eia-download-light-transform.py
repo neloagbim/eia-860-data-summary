@@ -60,6 +60,7 @@ connection_string = f'postgresql://{user}:{password}@{host}:{port}/{database}'
 engine = create_engine(connection_string)
 metadata = MetaData()
 
+x=0
 # create 5 tables needed
 for x in range(0,len(years)):
     reports = Table('reports_'+str(years[x]), 
