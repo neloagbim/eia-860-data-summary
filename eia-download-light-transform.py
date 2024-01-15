@@ -91,7 +91,6 @@ for x in range(0,len(years)):
     #delete report variable
     del reports
 
-engine.close()
 #%%
 
 # get current date
@@ -101,35 +100,6 @@ current_date = datetime.today()
 release_date = "2024-01-24"
 
 release_date = datetime.strptime(release_date,"%Y-%m-%d")
-
-current_date>release_date
-
-# define columns to go in final dataframe for sql upload
-
-# final_cols = ['entity_id', 
-#             'entity_name',
-#             'plant_id',
-#             'plant_name',  
-#             'state',
-#             'county',
-#             'balancing_auth',
-#             'sector',
-#             'unit_id',
-#             'nameplate_capacity_mw',
-#             'technology',
-#             'fuel_source',
-#             'prime_mover',
-#             'op_month', 
-#             'op_year',
-#             'retire_month',
-#             'retire_year', 
-#             'op_status', 
-#             'report_date' ]
-
-
-# # create dataframe to hold eia data
-# df_eia = pd.DataFrame(columns=final_cols)
-
 
 
 #  necessary columns from download
@@ -245,6 +215,3 @@ for yr in tqdm(range(0,len(years))):
         time.sleep(2.5)
     # put df in table
     df_eia.to_sql('reports_'+str(years[yr]),schema='eia860', con=engine,if_exists = 'append', index=False)
-
-
-
