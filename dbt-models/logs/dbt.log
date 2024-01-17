@@ -1,0 +1,24 @@
+[0m14:18:38.407482 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000016F28E9C0E0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000016F28BB3590>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000016F28E9D130>]}
+
+
+============================== 14:18:38.407482 | c75b0053-4870-445b-a0fd-87b607f4b169 ==============================
+[0m14:18:38.407482 [info ] [MainThread]: Running with dbt=1.7.4
+[0m14:18:38.407482 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'debug': 'False', 'fail_fast': 'False', 'log_path': 'logs', 'version_check': 'True', 'profiles_dir': 'C:\\Users\\NeloAgbim\\.dbt', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'invocation_command': 'dbt init', 'introspect': 'True', 'static_parser': 'True', 'target_path': 'None', 'log_format': 'default', 'send_anonymous_usage_stats': 'True'}
+[0m14:18:59.836794 [debug] [MainThread]: Starter project path: C:\Users\NeloAgbim\Documents\PythonPrjEnvs\eiasummary\venv\Lib\site-packages\dbt\include\starter_project
+[0m14:18:59.848382 [info ] [MainThread]: 
+Your new dbt project "eia860_prj" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m14:18:59.848382 [info ] [MainThread]: Setting up your profile.
