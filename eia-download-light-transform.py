@@ -52,7 +52,7 @@ months = ['january',
 
 #%% Connecting to Postgresql
 # read in secrets file
-secrets = open(r'C:\Users\NeloAgbim\Documents\PythonPrjEnvs\eiasummary\secrets.json')
+secrets = open(r'C:\Users\NeloAgbim\Documents\PythonPrjEnvs\eiasummary\github\secrets.json')
 
 # save as a credentials dictionary
 cred = json.load(secrets)
