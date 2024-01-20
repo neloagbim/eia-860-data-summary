@@ -1,0 +1,7 @@
+
+version: 2
+
+models:
+  - name: stg_reports2
+    description: "test union"
+    

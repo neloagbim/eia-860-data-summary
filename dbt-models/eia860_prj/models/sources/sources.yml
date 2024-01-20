@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: eia860_stg
+    database: eia860
+    schema: raw
+    tables:
+      - name: reports_2023
+      - name: reports_2022
+      - name: reports_2021
+      - name: reports_2020
+      - name: reports_2019
