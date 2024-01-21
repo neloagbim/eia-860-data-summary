@@ -4,4 +4,10 @@ version: 2
 models:
   - name: stg_reports2
     description: "test union"
+    columns:
+      - name: report_plant_id
+        description: "primary key identifying unique plant, unit, and eia reporting month"
+        tests:
+          - unique
+          - not_null
     
