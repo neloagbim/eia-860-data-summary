@@ -1,7 +1,7 @@
 version: 2
 
 sources:
-  - name: eia860_stg
+  - name: raw
     database: eia860
     schema: raw
     tables:
