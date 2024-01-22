@@ -7,3 +7,7 @@ Series of scripts does the following:
 2) Queries data from postgres and loads them into a staging area. [In progress]
 3) Transforms staging files using dimensional modeling.[In progress]
 4) Then puts the dim and fact tables in a mart.[In progress]
+
+*NOTE:
+  - dbt with postgres only supports 1)the target schema and source schema being in the same database and 2) 1 target schema per project
+  - therefore, the dbt portion of this repository is split into 2 dbt projects in the "dbt-models" directory. 
