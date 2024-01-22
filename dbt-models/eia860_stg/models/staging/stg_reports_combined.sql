@@ -1,6 +1,6 @@
-With y2023 as (
+With y2023 as ( --create CTE for each report year
     select *, Concat(plant_id, '-', unit_id, '-',report_date) as report_plant_id 
-    from {{source('raw','reports_2023')}}
+    from {{source('raw','reports_2023')}} --reference source 2023 table in raw schema
 ),
 y2022 as(
     select * , Concat(plant_id, '-', unit_id, '-',report_date) as report_plant_id
@@ -18,7 +18,7 @@ y2019 as (
     select * , Concat(plant_id, '-', unit_id, '-',report_date) as report_plant_id
     from {{source('raw','reports_2019')}}
 )
-
+-- union all CTEs making sure to keep all records
 select * from y2023
 union all
 select * from y2022
