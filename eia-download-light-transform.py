@@ -43,7 +43,7 @@ months = ['january',
 'april',
 'may',
 'june',
-'July' ,
+'july' ,
 'august',
 'september',
 'october',
@@ -58,11 +58,11 @@ secrets = open(r'C:\Users\NeloAgbim\Documents\PythonPrjEnvs\eiasummary\github\se
 cred = json.load(secrets)
 
 # connect to sql
-user = cred['raw']['user']
-password = cred['raw']['password']
-host= cred['raw']['host']
-port = cred['raw']['port']
-database = cred['raw']['database']
+user = cred['db_creds']['user']
+password = cred['db_creds']['password']
+host= cred['db_creds']['host']
+port = cred['db_creds']['port']
+database = cred['db_creds']['database']
 
 # string together connction details
 connection_string = f'postgresql://{user}:{password}@{host}:{port}/{database}'
@@ -297,5 +297,5 @@ else: # the december 2023 data released
                'retire_month':'int', 'retire_year':'int', 'op_status':'str', 'report_date':'str'})
 
         # put df in table
-        df.to_sql('reports_2023',schema='eia860', con=engine,if_exists = 'append', index=False)
+        df.to_sql('reports_2023',schema='raw', con=engine,if_exists = 'append', index=False)
     
