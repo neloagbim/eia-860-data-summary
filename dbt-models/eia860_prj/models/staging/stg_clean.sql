@@ -1,7 +1,10 @@
-select 
+SELECT
+report_plant_id, 
 plant_id,
+plant_name,
 state,
 county,
+unit_id,
 CASE 
     WHEN balancing_auth = 'CISO' THEN 'CAISO'
     WHEN balancing_auth = 'ERCO' THEN 'ERCOT'
@@ -10,7 +13,22 @@ CASE
     WHEN balancing_auth = 'MISO' THEN 'MISO'
     WHEN balancing_auth = 'NYIS' THEN 'NYISO'
     WHEN balancing_auth = 'SWPP' THEN 'SPP'
-    ELSE 'Not RTO Balancing Autority'
+    ELSE 'Not RTO Balancing Autority' END as iso,
+
+op_month,
+op_year,
+technology,
+prime_mover,
+CASE 
+    WHEN fuel_source = 'SUN' THEN 'SUN'
+    WHEN fuel_source = 'WND' THEN 'WIND'
+    ELSE 'Not Renewable Energy Source' END as fuel_source,
+--sector, --sector is only utilities
+nameplate_capacity_mw as capacity_mw,
+
 SPLIT_PART(report_date, '-',2)::integer as report_year,
 SPLIT_PART(report_date,'-',1)::text as report_month
-from {{ref('stg_reports_combined')}}
+FROM {{ref('stg_reports_combined')}}
+
+WHERE
+fuel_source in ('WND','SUN')

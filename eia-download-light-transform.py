@@ -113,7 +113,7 @@ cols = ['Entity ID', 'Entity Name', 'Plant ID', 'Plant Name', 'Plant State',
        'Status', 'Report Date']
 
 yr=0
-
+mnth=0
 #if the release date hasn't come (i.e. first run)
 if current_date < release_date: 
     # create a dataframe of eia data for each year
