@@ -29,6 +29,11 @@ union all
 select * from y2020
 union all
 select * from y2019)
--- add surrogate key to combined table
-select *, {{dbt_utils.generate_surrogate_key(['plant_id','unit_id','report_date'])}} as report_plant_id
+-- combine all tables
+
+select *, 
+-- add surrogate key for distinct power plant unit per report release 
+{{dbt_utils.generate_surrogate_key(['plant_id','unit_id','report_date'])}} as report_plant_id,
+-- add surrogate key for distinct power plant unit
+{{dbt_utils.generate_surrogate_key(['plant_id','unit_id','county','balancing_auth','op_month','op_year','plant_name'])}} as plant_unit_id
 from y_all
