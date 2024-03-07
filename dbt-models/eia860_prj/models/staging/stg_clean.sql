@@ -27,8 +27,7 @@ CASE
 nameplate_capacity_mw as capacity_mw,
 -- split report date column into 2 columns: month and year
 SPLIT_PART(report_date, '-',2)::integer as report_year,
-SPLIT_PART(report_date,'-',1)::text as report_month
+INITCAP(SPLIT_PART(report_date,'-',1)::text) as report_month -- save month as text and capitlalize first letter in each month
 FROM {{ref('stg_reports_combined')}}
+WHERE fuel_source in ('WND','SUN')
 
-WHERE
-fuel_source in ('WND','SUN')
