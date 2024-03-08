@@ -6,8 +6,8 @@ Series of scripts does the following:
 - [eia-download-light-transform.py](https://github.com/neloagbim/eia-860-data-summary/blob/main/eia-download-light-transform.py) 
   - [In progress: REFACTOR TO USE FUNCTIONAL PROGRAMMING PARADIGM]
 2) Uses dbt to query and transform raw data from postgres and loads them into a staging area. [Complete]
-- Union: https://github.com/neloagbim/eia-860-data-summary/blob/main/dbt-models/eia860_prj/models/staging/stg_reports_combined.sql
-- Additional cleaning: https://github.com/neloagbim/eia-860-data-summary/blob/main/dbt-models/eia860_prj/models/staging/stg_clean.sql
+- Initial Staging Table: [stg_reports_combined.sql](https://github.com/neloagbim/eia-860-data-summary/blob/main/dbt-models/eia860_prj/models/staging/stg_reports_combined.sql)
+- Additional cleaning: [stg_clean.sql](https://github.com/neloagbim/eia-860-data-summary/blob/main/dbt-models/eia860_prj/models/staging/stg_clean.sql)
 3) Transforms staging files using dimensional modeling. [Complete]
 4) Then puts the dim and fact tables in a mart. [Complete]
 
