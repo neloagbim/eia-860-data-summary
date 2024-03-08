@@ -57,7 +57,7 @@ secrets = open(r'C:\Users\NeloAgbim\Documents\PythonPrjEnvs\eiasummary\github\se
 # save as a credentials dictionary
 cred = json.load(secrets)
 
-# connect to sql
+# credentials for sql connection
 user = cred['db_creds']['user']
 password = cred['db_creds']['password']
 host= cred['db_creds']['host']
