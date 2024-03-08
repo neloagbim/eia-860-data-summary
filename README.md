@@ -10,6 +10,9 @@ Series of scripts does the following:
 3) Transforms staging files using dimensional modeling. [Complete]
 4) Then puts the dim and fact tables in a mart. [Complete]
 
+Lineage Graph as of March 2024:
+![image](https://github.com/neloagbim/eia-860-data-summary/assets/47784696/c22eff74-15fe-4822-b85f-1c0e6bbc4aeb)
+
 *NOTE:
   - dbt with postgres only supports the target schema and source schema being in the same database.
   - therefore, the dbt portion of this repository is all in 1 database with 3 different schemas: raw, staging, and datawarehouse
