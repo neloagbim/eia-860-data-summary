@@ -19,7 +19,7 @@ st.set_page_config(
 )
 
 st.title("EIA860 2019-2023 Plant Summary")
-st.markdown("by Nelo Agbim")
+st.write("by Nelo Agbim")
 
 # connect to google to get data 
 # scope of where api will work
