@@ -6,7 +6,7 @@ import streamlit as st
 import plotly.express as px
 
 st.set_page_config(
-    title="Project Overview",
+    page_title="Project Overview",
     page_icon= ":bulb:",
     layout= "wide",
     initial_sidebar_state= "expanded"
