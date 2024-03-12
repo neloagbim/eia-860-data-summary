@@ -13,7 +13,6 @@ from tqdm import tqdm
 import requests
 import json
 import io
-import psycopg2
 from sqlalchemy import create_engine
 from sqlalchemy import (MetaData,Table, Column, Text, Integer, Numeric, VARCHAR)
 from datetime import datetime
