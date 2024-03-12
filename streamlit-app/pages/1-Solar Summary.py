@@ -30,7 +30,7 @@ st.write("by Nelo Agbim")
 #credentials = Credentials.from_service_account_file(r'C:\Users\NeloAgbim\Documents\PythonPrjEnvs\eiasummary\github\copy-of-google-sheets-secrets.json',  scopes=scopes)
 #gc = gspread.authorize(credentials)
 
-@st.cache_data
+#@st.cache_data
 # write function for retrieving google sheet data
 #def load_sheet_data(url,sheetname):
     # open the google sheet
@@ -51,7 +51,7 @@ st.write("by Nelo Agbim")
 #st.dataframe(df)
 
 # create 2 columns
-col1, col2 = st.columns(2) 
+col1,col2 = st.columns(2) 
 
 with col1:
     # capacity parameter
