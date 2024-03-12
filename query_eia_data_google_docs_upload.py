@@ -79,7 +79,7 @@ gc = gspread.authorize(credentials)
 url = 'https://docs.google.com/spreadsheets/d/1ddigiLsVZdPGpCO0IAeFFgjaQcAguABD3n9HaQzgL4E/edit#gid=0'
 # open the google sheet
 gs = gc.open_by_url(url)
-# select a work sheet from its name
+# select a sheet by its name
 worksheet = gs.worksheet('dataset')
 
 
