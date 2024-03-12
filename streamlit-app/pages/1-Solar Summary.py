@@ -23,27 +23,28 @@ st.write("by Nelo Agbim")
 
 # connect to google to get data 
 # scope of where api will work
-scopes = ['https://www.googleapis.com/auth/spreadsheets',
-          'https://www.googleapis.com/auth/drive']
+#scopes = ['https://www.googleapis.com/auth/spreadsheets',
+#          'https://www.googleapis.com/auth/drive']
 
 # read in google sheet credentials
-credentials = Credentials.from_service_account_file(r'C:\Users\NeloAgbim\Documents\PythonPrjEnvs\eiasummary\github\copy-of-google-sheets-secrets.json',  scopes=scopes)
-gc = gspread.authorize(credentials)
+#credentials = Credentials.from_service_account_file(r'C:\Users\NeloAgbim\Documents\PythonPrjEnvs\eiasummary\github\copy-of-google-sheets-secrets.json',  scopes=scopes)
+#gc = gspread.authorize(credentials)
 
 @st.cache_data
 # write function for retrieving google sheet data
-def load_sheet_data(url,sheetname):
+#def load_sheet_data(url,sheetname):
     # open the google sheet
-    gs = gc.open_by_url(url)
+#    gs = gc.open_by_url(url)
     # select a sheet by its name
-    worksheet = gs.worksheet(sheetname)
+ #   worksheet = gs.worksheet(sheetname)
     # get data from google sheet
-    sheet1 = worksheet.get_all_records() 
-    df = pd.DataFrame(sheet1)
-    return df
+#    sheet1 = worksheet.get_all_records() 
+#    df = pd.DataFrame(sheet1)
+#    return df
 
 # get data from google sheet
-url = 'https://docs.google.com/spreadsheets/d/1ddigiLsVZdPGpCO0IAeFFgjaQcAguABD3n9HaQzgL4E/edit#gid=0'
+
+#url = 'https://docs.google.com/spreadsheets/d/1ddigiLsVZdPGpCO0IAeFFgjaQcAguABD3n9HaQzgL4E/edit#gid=0'
 #df = load_sheet_data(url, sheetname = 'dataset')
 
 #create streamlit df object
