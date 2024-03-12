@@ -5,8 +5,6 @@ google-auth==2.28.2
 google-auth-oauthlib==1.2.0
 gspread==6.0.2
 gspread-dataframe==3.3.1
-jsonschema==4.21.0
-jsonschema-specifications==2023.12.1
 numpy==1.26.3
 oauthlib==3.2.2
 pandas==2.1.4
