@@ -49,8 +49,8 @@ def load_sheet_data(url,sheetname):
 url = 'https://docs.google.com/spreadsheets/d/1ddigiLsVZdPGpCO0IAeFFgjaQcAguABD3n9HaQzgL4E/edit#gid=0'
 df = load_sheet_data(url, sheetname = 'dataset')
 
-#create streamlit df object
-#st.dataframe(df)
+df= df[df["op_year"]>2015].reset_index(drop=True)
+
 
 # create 2 columns
 col1,col2 = st.columns(2) 
@@ -62,4 +62,5 @@ with col2:
     # time period selection
     period = st.selectbox ("Aggregate Data Yearly or Quarterly?", ("Yearly","Quarterly"))
 
-# select
+# display streamlit df object
+st.dataframe(df)
