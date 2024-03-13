@@ -1,6 +1,6 @@
 DateTime==5.4
-dbt-core==1.7.4
-dbt-postgres==1.7.4
+dbt-core==1.7.9
+dbt-postgres==1.7.9
 google-auth==2.28.2
 google-auth-oauthlib==1.2.0
 gspread==6.0.2
