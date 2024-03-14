@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: fct_unit_capacity
+    description: "fact table with all power plant unit capacities for each eia report release."
+    columns:
+      - name: plant_unit_id
+        tests:
+          - relationships:
+              to: ref('dim_plant_unit')
+              field: plant_unit_id
+          - not_null
+      - name: report_date_id
+        tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_id
+          - not_null
+  - name: dim_plant_unit
+    description: "dimension table with all power plant unit descriptors."
+    columns:
+      - name: op_date_id
+        tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_id
+
+    
