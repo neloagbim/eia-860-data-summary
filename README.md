@@ -4,7 +4,7 @@ A series of scripts that download, transform, and model eia 860 power plant data
 Series of scripts does the following:
 1) Extracts eia 860 files from the website. The script then does some transformation on the files, concats them, and drops them in storage.
 - [eia-download-light-transform.py](https://github.com/neloagbim/eia-860-data-summary/blob/main/eia-download-light-transform.py) 
-  - [In progress: REFACTOR TO USE FUNCTIONAL PROGRAMMING PARADIGM]
+  - [In Progress: REFACTOR TO USE FUNCTIONAL PROGRAMMING PARADIGM]
 2) Uses dbt to query and transform raw data from postgres and loads them into a staging area. [In Progress - Add USGS Data]
 - Initial Staging Table: [stg_reports_combined.sql](https://github.com/neloagbim/eia-860-data-summary/blob/main/dbt-models/eia860_prj/models/staging/stg_reports_combined.sql)
 - Additional cleaning: [stg_clean.sql](https://github.com/neloagbim/eia-860-data-summary/blob/main/dbt-models/eia860_prj/models/staging/stg_clean.sql)
